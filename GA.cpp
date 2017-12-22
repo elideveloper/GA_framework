@@ -3,12 +3,11 @@
 #include <algorithm>
 #include <iostream>
 
-void GA::sortGeneration(Generation& generation, individEvaluator f)
+// нужна ли эта йункция если один метод только вызывается внутри?!
+void GA::sortGeneration(Generation& generation)
 {
-	std::sort(generation.begin(), generation.end(), [f](Individual* ind1, Individual* ind2)->bool {
-		std::cout << evaluateIndividual(ind1) << std::endl;
-		std::cout << evaluateIndividual(ind2) << std::endl;
-		return f(ind1) < f(ind2);
+	std::sort(generation.begin(), generation.end(), [](const Individual* ind1, const Individual* ind2)->bool {
+		return evaluateIndividual(ind1) < evaluateIndividual(ind2);
 	});
 }
 
@@ -18,19 +17,27 @@ GA::GA() : generationSize(0)
 GA::GA(unsigned int genSize) : generationSize(genSize)
 {}
 
-Generation GA::createRandomGeneration(const Individual& ind, individEvaluator f)
+Generation GA::createRandomGeneration(const Individual& ind)
 {
 	Generation gen;
 	gen.reserve(this->generationSize);
-	for (int j = 0; j < this->generationSize; j++) gen.push_back(ind.getRandomCopy());
-	for (const Individual* i : gen) {
-		std::cout << "address: " << i << std::endl;
-		std::cout << evaluateIndividual(i) << std::endl;
-	}
-	this->sortGeneration(gen, f);
-	std::cout << "after sorting" << std::endl;
-	for (const Individual* i : gen) {
-		std:: cout << evaluateIndividual(i) << std::endl;
-	}
+	for (int j = 0; j < this->generationSize; j++) gen.push_back(Individual::generateRandomOf(ind));
+	this->sortGeneration(gen);
 	return gen;
+}
+
+Individual* GA::findBest(const Individual& ind)
+{
+	// может при создании первого поколения сохранять переданный геном первым элементом массива, то есть делать копию этого индивида
+	Generation gen = createRandomGeneration(ind);
+	for (int i = 0; i < 10000; i++) {
+		cross(gen[1], gen[2]);
+		cross(gen[3], gen[4]);
+		for (int j = 5; j < this->generationSize; j++) {
+			gen[j]->randomize();
+		}
+		this->sortGeneration(gen);
+	}
+	// release memory
+	return gen[0];
 }

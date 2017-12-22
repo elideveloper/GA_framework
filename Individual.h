@@ -12,7 +12,6 @@ class Individual {
 
 	// Порядок аттрибутов должен быть единственным, то есть под одним и тем же индексом должны быть параметры одного и того же типа
 	Genome genome;
-	void randomize();
 public:
 	Individual();
 	Individual(const Genome& genome);
@@ -26,12 +25,14 @@ public:
 	//virtual void initIndividual();		// инициализирует геном из наследующего класса
 	//virtual void setGenome();			// инициализирует поля наследующего класса значениями аттрибутов из генома
 
-	Individual* getRandomCopy() const;
+	void randomize();
+
+	static Individual* generateRandomOf(const Individual& ind);
 	void mutate();			// рандомизирует случайный параметр генома
 
 	friend void cross(Individual* mom, Individual* dad);
 	friend double evaluateIndividual(const Individual* ind);
 };
 
-typedef double(*individEvaluator)(const Individual*);
+typedef double(*individEvaluator)(const Individual&);
 typedef std::vector<Individual*> Generation;

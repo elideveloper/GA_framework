@@ -15,5 +15,5 @@ public:
 	int getSquare() const;
 
 	virtual void randomize() override;
-
+	virtual Attribute* clone() override;
 };

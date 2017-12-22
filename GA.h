@@ -5,7 +5,7 @@
 class GA {
 	unsigned int generationSize;
 
-	void sortGeneration(Generation& generation, individEvaluator f);
+	void sortGeneration(Generation& generation);
 public:
 	GA();
 	GA(unsigned int genSize);
@@ -13,6 +13,6 @@ public:
 	// init stop conditions
 	// run GA and get result
 
-	// create generation m b
-	Generation createRandomGeneration(const Individual& ind, individEvaluator f);
+	Generation createRandomGeneration(const Individual& ind);
+	Individual* findBest(const Individual& ind);
 };

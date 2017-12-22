@@ -1,7 +1,5 @@
 #include "Individual.h"
 
-#include <iostream>
-
 #include <random>
 
 void cross(Individual* mom, Individual* dad)
@@ -28,18 +26,18 @@ Individual::Individual()
 
 Individual::Individual(const Genome& genome)
 {
-	for (Attribute* a : genome) this->genome.push_back(a);
+	for (Attribute* a : genome) this->genome.push_back(a->clone());
 }
 
 Individual::Individual(const Individual& ind)
 {
-	for (Attribute* a : ind.genome) this->genome.push_back(a);
+	for (Attribute* a : ind.genome) this->genome.push_back(a->clone());
 }
 
 Individual& Individual::operator=(const Individual& ind)
 {
 	this->genome.clear(); this->genome.resize(0);
-	for (Attribute* a : ind.genome) this->genome.push_back(a);
+	for (Attribute* a : ind.genome) this->genome.push_back(a->clone());
 	return *this;
 }
 
@@ -48,12 +46,11 @@ void Individual::randomize()
 	for (Attribute* a : this->genome) a->randomize();
 }
 
-Individual* Individual::getRandomCopy() const
+Individual* Individual::generateRandomOf(const Individual& ind)
 {
-	Individual* ind = new Individual(this->genome);
-	ind->randomize();
-	std::cout << "random copy: " << evaluateIndividual(ind) << std::endl;
-	return ind;
+	Individual* i = new Individual(ind);
+	i->randomize();
+	return i;
 }
 
 void Individual::mutate()
