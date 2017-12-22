@@ -2,8 +2,6 @@
 
 #include "Attribute.h"
 
-#include <vector>
-
 class Individual {
 	// мб считывать все числовые значения в строку и этой строкой манипулировать потом. 
 	// всегда ли скрещиваемые данные это какие то числовые значения?
@@ -13,21 +11,27 @@ class Individual {
 	// останется в классе наследующем Индивида определить функцию которая считывает набор данных в геном, и все содержащиеся данные должны быть унаследованы от Attribute 
 
 	// Порядок аттрибутов должен быть единственным, то есть под одним и тем же индексом должны быть параметры одного и того же типа
-	std::vector<Attribute*> genome;
-
-public:
-	virtual ~Individual() = 0;
-
-	virtual void initIndividual();		// инициализирует геном из наследующего класса
-
-	virtual void setGenome();			// инициализирует поля наследующего класса значениями аттрибутов из генома
-
-	// у аттрибутов должен быть метод рандомайз, а здесь мы его просто вызовем для аттрибутов
+	Genome genome;
 	void randomize();
+public:
+	Individual();
+	Individual(const Genome& genome);
+	// освобождать память в деструкторе
 
+	Individual(const Individual& ind);
+	Individual& operator=(const Individual& ind);
+
+	// эти две функции могут не пригодится если Индивид не наследуется а используется как есть
+	// а по окончании эволюции, набор параметров берется прямо из генома
+	//virtual void initIndividual();		// инициализирует геном из наследующего класса
+	//virtual void setGenome();			// инициализирует поля наследующего класса значениями аттрибутов из генома
+
+	Individual* getRandomCopy() const;
 	void mutate();			// рандомизирует случайный параметр генома
 
 	friend void cross(Individual* mom, Individual* dad);
+	friend double evaluateIndividual(const Individual* ind);
 };
 
-typedef std::vector<Individual*> Generation
+typedef double(*individEvaluator)(const Individual*);
+typedef std::vector<Individual*> Generation;
