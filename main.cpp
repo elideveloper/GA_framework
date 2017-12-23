@@ -28,20 +28,10 @@ int main() {
 
 	srand(time(0));
 
-	class GA ga(8);
-	Genome genome;
-	genome.push_back(new Rect(21, 5));
-	genome.push_back(new Rect(100, 30));
-	genome.push_back(new Rect(33, 22));
-	genome.push_back(new Rect(25, 40));
-	genome.push_back(new Rect(20, 50));
-	genome.push_back(new Rect(24, 30));
-	genome.push_back(new Rect(88, 22));
-	genome.push_back(new Rect(25, 12));
-	Individual ind(genome);
-	std::cout << "first: " << evaluateIndividual(&ind) << std::endl;
-	Individual* bestInd = ga.findBest(ind);
+	class GA ga(10, 8, new Rect());
+	Individual* bestInd = ga.findBest();
 	std::cout << "best: " << evaluateIndividual(bestInd) << std::endl;
+	bestInd->print();
 
 	system("pause");
 

@@ -2,25 +2,6 @@
 
 #include <random>
 
-void cross(Individual* mom, Individual* dad)
-{
-	if (mom->genome.size() < 2) return;
-	int mid = (mom->genome.size() == 2) ? 1 : rand() % (mom->genome.size() - 1) + 1;
-	Attribute* tmp = nullptr;
-	for (int i = 0; i < mom->genome.size(); i++) {
-		if (i < mid) {
-			tmp = mom->genome[i];
-			mom->genome[i] = dad->genome[i];
-			dad->genome[i] = tmp;
-		}
-		else {
-			tmp = dad->genome[i];
-			dad->genome[i] = mom->genome[i];
-			mom->genome[i] = tmp;
-		}
-	}
-}
-
 Individual::Individual()
 {}
 
@@ -41,19 +22,33 @@ Individual& Individual::operator=(const Individual& ind)
 	return *this;
 }
 
-void Individual::randomize()
+void Individual::print()
 {
-	for (Attribute* a : this->genome) a->randomize();
+	for (Attribute* a : this->genome) a->print();
 }
 
-Individual* Individual::generateRandomOf(const Individual& ind)
+Individual* Individual::randomize()
 {
-	Individual* i = new Individual(ind);
-	i->randomize();
-	return i;
+	for (Attribute* a : this->genome) a->randomize();
+	return this;
+}
+
+Individual* Individual::generateRandomOf(const Individual* ind)
+{
+	return (new Individual(*ind))->randomize();
 }
 
 void Individual::mutate()
 {
 	this->genome[rand() % this->genome.size()]->randomize();
+}
+
+void crossIndividuals(Individual* mom, Individual* dad)
+{
+	if (mom->genome.size() < 2) return;
+	int mid = (mom->genome.size() == 2) ? 1 : rand() % (mom->genome.size() - 1) + 1;
+	for (int i = 0; i < mom->genome.size(); i++) {
+		if (i < mid) swapAttributes(dad->genome[i], mom->genome[i]);
+		else swapAttributes(mom->genome[i], dad->genome[i]);
+	}
 }

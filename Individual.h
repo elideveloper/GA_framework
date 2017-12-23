@@ -20,17 +20,19 @@ public:
 	Individual(const Individual& ind);
 	Individual& operator=(const Individual& ind);
 
+	void print();
+
 	// эти две функции могут не пригодится если Индивид не наследуется а используется как есть
 	// а по окончании эволюции, набор параметров берется прямо из генома
 	//virtual void initIndividual();		// инициализирует геном из наследующего класса
 	//virtual void setGenome();			// инициализирует поля наследующего класса значениями аттрибутов из генома
 
-	void randomize();
+	Individual* randomize();
 
-	static Individual* generateRandomOf(const Individual& ind);
+	static Individual* generateRandomOf(const Individual* ind);
 	void mutate();			// рандомизирует случайный параметр генома
 
-	friend void cross(Individual* mom, Individual* dad);
+	friend void crossIndividuals(Individual* mom, Individual* dad);
 	friend double evaluateIndividual(const Individual* ind);
 };
 

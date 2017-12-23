@@ -3,7 +3,7 @@
 #include <algorithm>
 #include <iostream>
 
-// нужна ли эта йункция если один метод только вызывается внутри?!
+// нужна ли эта функция если один метод только вызывается внутри?!
 void GA::sortGeneration(Generation& generation)
 {
 	std::sort(generation.begin(), generation.end(), [](const Individual* ind1, const Individual* ind2)->bool {
@@ -11,28 +11,31 @@ void GA::sortGeneration(Generation& generation)
 	});
 }
 
-GA::GA() : generationSize(0)
+GA::GA() : generationSize(0), genomeLength(0), individualInstance(nullptr)
 {}
 
-GA::GA(unsigned int genSize) : generationSize(genSize)
-{}
-
-Generation GA::createRandomGeneration(const Individual& ind)
+GA::GA(unsigned int generationSize, unsigned int genomeLength, Attribute* attrInstance)
+	: generationSize(generationSize), genomeLength(genomeLength)
 {
-	Generation gen;
-	gen.reserve(this->generationSize);
-	for (int j = 0; j < this->generationSize; j++) gen.push_back(Individual::generateRandomOf(ind));
-	this->sortGeneration(gen);
-	return gen;
+	Genome genome; genome.reserve(genomeLength);
+	for (int i = 0; i < genomeLength; i++) genome.push_back(attrInstance->clone()->randomize());
+	this->individualInstance = new Individual(genome);
 }
 
-Individual* GA::findBest(const Individual& ind)
+Generation GA::createRandomGeneration()
 {
-	// может при создании первого поколения сохранять переданный геном первым элементом массива, то есть делать копию этого индивида
-	Generation gen = createRandomGeneration(ind);
+	Generation generation; generation.reserve(this->generationSize);
+	for (int j = 0; j < this->generationSize; j++) generation.push_back(Individual::generateRandomOf(this->individualInstance));
+	this->sortGeneration(generation);
+	return generation;
+}
+
+Individual* GA::findBest()
+{
+	Generation gen = createRandomGeneration();
 	for (int i = 0; i < 10000; i++) {
-		cross(gen[1], gen[2]);
-		cross(gen[3], gen[4]);
+		crossIndividuals(gen[1], gen[2]);
+		crossIndividuals(gen[3], gen[4]);
 		for (int j = 5; j < this->generationSize; j++) {
 			gen[j]->randomize();
 		}
