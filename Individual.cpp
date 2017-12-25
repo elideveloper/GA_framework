@@ -10,6 +10,11 @@ Individual::Individual(const Genome& genome)
 	for (Attribute* a : genome) this->genome.push_back(a->clone());
 }
 
+Individual::~Individual()
+{
+	for (Attribute* a : this->genome) delete a;
+}
+
 Individual::Individual(const Individual& ind)
 {
 	for (Attribute* a : ind.genome) this->genome.push_back(a->clone());
@@ -43,7 +48,7 @@ void Individual::mutate()
 	this->genome[rand() % this->genome.size()]->randomize();
 }
 
-void crossIndividuals(Individual* mom, Individual* dad)
+void crossIndividuals(Individual* mom, Individual* dad, double mutationProb)
 {
 	if (mom->genome.size() < 2) return;
 	int mid = (mom->genome.size() == 2) ? 1 : rand() % (mom->genome.size() - 1) + 1;
@@ -51,4 +56,6 @@ void crossIndividuals(Individual* mom, Individual* dad)
 		if (i < mid) swapAttributes(dad->genome[i], mom->genome[i]);
 		else swapAttributes(mom->genome[i], dad->genome[i]);
 	}
+	if ((rand() % (10000 + 1)) * 0.0001 <= mutationProb) mom->mutate();
+	if ((rand() % (10000 + 1)) * 0.0001 <= mutationProb) dad->mutate();
 }

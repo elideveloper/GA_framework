@@ -8,14 +8,14 @@ class GA {
 	Individual* individualInstance;
 	double acceptableError;
 	unsigned int maxGenerations;
+	double mutationProb;
+	unsigned int numCross;
 
-	void sortGeneration(Generation& generation);
+	double sortAndGetMinError(Generation& generation);
 public:
 	GA();
-	GA(unsigned int populationSize, unsigned int genomeLength, Attribute* attrInstance, double acceptableError, unsigned int maxGenerations);
+	GA(unsigned int populationSize, unsigned int genomeLength, Attribute* attrInstance, double acceptableError, unsigned int maxGenerations, unsigned int numCross, double mutationProb);
 
-	// numCross
-	// probabMutate
 
 	Generation createRandomGeneration();
 	Individual* findBest();

@@ -4,6 +4,7 @@
 
 struct Attribute {
 public:
+	virtual ~Attribute();
 	virtual Attribute* clone() = 0;
 	virtual Attribute* randomize() = 0;
 

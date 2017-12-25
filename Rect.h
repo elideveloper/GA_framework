@@ -10,6 +10,7 @@ public:
 	Rect(int w, int h);
 	Rect(const Rect& rect);
 	Rect& operator=(const Rect& rect);
+	~Rect();
 
 	int getH() const;
 	int getW() const;

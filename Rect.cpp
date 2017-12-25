@@ -19,6 +19,9 @@ Rect& Rect::operator=(const Rect& rect)
 	return *this;
 }
 
+Rect::~Rect()
+{}
+
 int Rect::getH() const
 {
 	return this->h;

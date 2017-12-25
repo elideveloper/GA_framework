@@ -15,7 +15,7 @@ class Individual {
 public:
 	Individual();
 	Individual(const Genome& genome);
-	// освобождать память в деструкторе
+	~Individual();
 
 	Individual(const Individual& ind);
 	Individual& operator=(const Individual& ind);
@@ -32,7 +32,7 @@ public:
 	static Individual* generateRandomOf(const Individual* ind);
 	void mutate();			// рандомизирует случайный параметр генома
 
-	friend void crossIndividuals(Individual* mom, Individual* dad);
+	friend void crossIndividuals(Individual* mom, Individual* dad, double mutationProb);
 	friend double evaluateIndividual(const Individual* ind);
 };
 
