@@ -2,13 +2,21 @@
 
 #include <algorithm>
 #include <iostream>
+#include <unordered_map>
 
 #define MAX(a,b) (((a)>(b))?(a):(b))
 #define MIN(a,b) (((a)<(b))?(a):(b))
 
 double GA::sortAndGetMinError(Generation& generation)
 {
-	// м.б. тут сначала оценить все а потом уже брать вычисленные значения при сортировке, чтобы одного и того же индивида несколько раз не оценивать
+	/*std::unordered_map<Individual*, double> scores;
+	for (Individual* i : generation) {
+		scores.insert({ i, evaluateIndividual(i) });
+	}
+	std::sort(generation.begin(), generation.end(), [scores](Individual* ind1, Individual* ind2)->bool {
+		return scores.find(ind1)->second < scores.find(ind2)->second;
+	});*/
+	
 	std::sort(generation.begin(), generation.end(), [](const Individual* ind1, const Individual* ind2)->bool {
 		return evaluateIndividual(ind1) < evaluateIndividual(ind2);
 	});
@@ -37,7 +45,6 @@ Generation GA::createRandomGeneration()
 
 Individual* GA::findBest()
 {
-	// проверять если мало элементов в популяции
 	Generation gen = createRandomGeneration();
 	int j = 0;
 	for (int i = 0; i < this->maxGenerations; i++) {
