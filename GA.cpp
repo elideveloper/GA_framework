@@ -5,6 +5,7 @@
 
 double GA::sortAndGetMinError(Generation& generation)
 {
+	// м.б. тут сначала оценить все а потом уже брать вычисленные значения при сортировке, чтобы одного и того же индивида несколько раз не оценивать
 	std::sort(generation.begin(), generation.end(), [](const Individual* ind1, const Individual* ind2)->bool {
 		return evaluateIndividual(ind1) < evaluateIndividual(ind2);
 	});

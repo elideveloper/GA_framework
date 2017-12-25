@@ -16,7 +16,6 @@ public:
 	GA();
 	GA(unsigned int populationSize, unsigned int genomeLength, Attribute* attrInstance, double acceptableError, unsigned int maxGenerations, unsigned int numCross, double mutationProb);
 
-
 	Generation createRandomGeneration();
 	Individual* findBest();
 };

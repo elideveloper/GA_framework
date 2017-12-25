@@ -21,7 +21,7 @@ int main() {
 
 	srand(time(0));
 
-	class GA ga(10, 8, new Rect(), 10.0, 10000, 4, 0.1);
+	class GA ga(200, 10, new Rect(), 10.0, 10000, 4, 0.1);
 	Individual* bestInd = ga.findBest();
 	std::cout << "best: " << evaluateIndividual(bestInd) << std::endl;
 	bestInd->print();
