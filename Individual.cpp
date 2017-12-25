@@ -50,12 +50,15 @@ void Individual::mutate()
 
 void crossIndividuals(Individual* mom, Individual* dad, double mutationProb)
 {
-	if (mom->genome.size() < 2) return;
-	int mid = (mom->genome.size() == 2) ? 1 : rand() % (mom->genome.size() - 1) + 1;
-	for (int i = 0; i < mom->genome.size(); i++) {
-		if (i < mid) swapAttributes(dad->genome[i], mom->genome[i]);
-		else swapAttributes(mom->genome[i], dad->genome[i]);
+	if (mom->genome.size() > 1) {
+		int mid = (mom->genome.size() == 2) ? 1 : rand() % (mom->genome.size() - 1) + 1;
+		for (int i = 0; i < mom->genome.size(); i++) {
+			if (i < mid) swapAttributes(dad->genome[i], mom->genome[i]);
+			else swapAttributes(mom->genome[i], dad->genome[i]);
+		}
 	}
-	if ((rand() % (10000 + 1)) * 0.0001 <= mutationProb) mom->mutate();
-	if ((rand() % (10000 + 1)) * 0.0001 <= mutationProb) dad->mutate();
+	if (mom->genome.size() > 0) {
+		if ((rand() % (10000 + 1)) * 0.0001 <= mutationProb) mom->mutate();
+		if ((rand() % (10000 + 1)) * 0.0001 <= mutationProb) dad->mutate();
+	}
 }

@@ -16,12 +16,22 @@ double evaluateIndividual(const Individual* ind) {
 	return fabs(10000.0 - sum);
 }
 
+// пролема когда аттрибуты зависимы между собой
+// например в TSP (каждый город только один раз в геноме, randomize() не может любой город вернуть, рандомизировать нужно индивида а не аттрибут!)
+
+
+const unsigned POP_SIZE = 200;
+const unsigned GEN_LENGTH = 10;
+const unsigned NUM_GENERAIONS = 100;
+const unsigned NUM_CROSS = 140;
+const double MUT_PROB = 0.1;
+const double ACCEPTABLE_ERROR = 10.0;
 
 int main() {
 
 	srand(time(0));
 
-	class GA ga(200, 10, new Rect(), 10.0, 10000, 4, 0.1);
+	class GA ga(POP_SIZE, GEN_LENGTH, new Rect(), ACCEPTABLE_ERROR, NUM_GENERAIONS, NUM_CROSS, MUT_PROB);
 	Individual* bestInd = ga.findBest();
 	std::cout << "best: " << evaluateIndividual(bestInd) << std::endl;
 	bestInd->print();

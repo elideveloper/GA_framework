@@ -15,10 +15,9 @@ class Individual {
 public:
 	Individual();
 	Individual(const Genome& genome);
-	~Individual();
-
 	Individual(const Individual& ind);
 	Individual& operator=(const Individual& ind);
+	~Individual();
 
 	void print();
 
