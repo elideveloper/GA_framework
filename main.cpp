@@ -17,18 +17,11 @@ double evaluateIndividual(const Individual* ind) {
 }
 
 
-/*
-Не обязательно создавать геном с элементами, 
-можно просто размер указать генома 
-и с помощью метода типа гетРандом
-образовать геном
-*/
-
 int main() {
 
 	srand(time(0));
 
-	class GA ga(10, 8, new Rect());
+	class GA ga(10, 8, new Rect(), 10.0, 10000);
 	Individual* bestInd = ga.findBest();
 	std::cout << "best: " << evaluateIndividual(bestInd) << std::endl;
 	bestInd->print();

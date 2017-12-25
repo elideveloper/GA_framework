@@ -3,20 +3,19 @@
 #include "Individual.h"
 
 class GA {
-	unsigned int generationSize;
+	unsigned int populationSize;
 	unsigned int genomeLength;
 	Individual* individualInstance;
+	double acceptableError;
+	unsigned int maxGenerations;
 
 	void sortGeneration(Generation& generation);
 public:
 	GA();
-	GA(unsigned int generationSize, unsigned int genomeLength, Attribute* attrInstance);
+	GA(unsigned int populationSize, unsigned int genomeLength, Attribute* attrInstance, double acceptableError, unsigned int maxGenerations);
 
 	// numCross
 	// probabMutate
-
-	// init stop conditions
-	// run GA and get result
 
 	Generation createRandomGeneration();
 	Individual* findBest();
