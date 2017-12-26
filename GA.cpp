@@ -4,9 +4,6 @@
 #include <iostream>
 #include <unordered_map>
 
-#define MAX(a,b) (((a)>(b))?(a):(b))
-#define MIN(a,b) (((a)<(b))?(a):(b))
-
 double GA::sortAndGetMinError(Generation& generation)
 {
 	/*std::unordered_map<Individual*, double> scores;
@@ -23,16 +20,18 @@ double GA::sortAndGetMinError(Generation& generation)
 	return evaluateIndividual(generation[0]);
 }
 
-GA::GA() : populationSize(0), genomeLength(0), individualInstance(nullptr), acceptableError(0.0), maxGenerations(0), numCross(0), mutationProb(0.0)
+GA::GA() : populationSize(0), genomeLength(0), individualInstance(nullptr), acceptableError(0.0), maxGenerations(0), numElite(0), numNewcomers(0), mutationProb(0.0)
 {}
 
-GA::GA(unsigned int populationSize, unsigned int genomeLength, Attribute* attrInstance, double acceptableError, unsigned int maxGenerations, unsigned int numCross, double mutationProb)
-	: populationSize(populationSize), genomeLength(genomeLength), acceptableError(acceptableError), maxGenerations(maxGenerations), numCross(numCross), mutationProb(mutationProb)
+GA::GA(unsigned int populationSize, unsigned int genomeLength, Attribute* attrInstance, double acceptableError, unsigned int maxGenerations, double elitePercentage, double newcomersPercentage, double mutationProb)
+	: populationSize(populationSize), genomeLength(genomeLength), acceptableError(acceptableError), maxGenerations(maxGenerations), mutationProb(mutationProb)
 {
 	Genome genome; genome.reserve(genomeLength);
 	for (int i = 0; i < genomeLength; i++) genome.push_back(attrInstance->clone()->randomize());
 	this->individualInstance = new Individual(genome);
-	// здесь лучше делать проверку чтобы нули не передавались и м.б. чтоб numCross четным был -нет, и так урежется до нижнего четного, все норм с функцией cross!
+	// use boundBetween()
+	this->numElite = populationSize * elitePercentage;
+	this->numNewcomers = populationSize * newcomersPercentage;
 }
 
 Generation GA::createRandomGeneration()

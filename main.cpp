@@ -30,7 +30,8 @@ double evaluateIndividual(const Individual* ind) {
 const unsigned POP_SIZE = 200;
 const unsigned GEN_LENGTH = 10;
 const unsigned NUM_GENERAIONS = 100;
-const unsigned NUM_CROSS = 140;
+const double ELITE_PERC = 0.1;
+const double NEWCOM_PERC = 0.3;
 const double MUT_PROB = 0.1;
 const double ACCEPTABLE_ERROR = 10.0;
 
@@ -38,7 +39,7 @@ int main() {
 
 	srand(time(0));
 
-	class GA ga(POP_SIZE, GEN_LENGTH, new Rect(), ACCEPTABLE_ERROR, NUM_GENERAIONS, NUM_CROSS, MUT_PROB);
+	class GA ga(POP_SIZE, GEN_LENGTH, new Rect(), ACCEPTABLE_ERROR, NUM_GENERAIONS, ELITE_PERC, NEWCOM_PERC, MUT_PROB);
 	Individual* bestInd = ga.findBest();
 	std::cout << "best: " << evaluateIndividual(bestInd) << std::endl;
 	bestInd->print();

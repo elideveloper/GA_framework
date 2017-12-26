@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Individual.h"
+#include "utility.h"
 
 class GA {
 	unsigned int populationSize;
@@ -9,12 +10,13 @@ class GA {
 	double acceptableError;
 	unsigned int maxGenerations;
 	double mutationProb;
-	unsigned int numCross;
+	unsigned int numElite;
+	unsigned int numNewcomers;
 
 	double sortAndGetMinError(Generation& generation);
 public:
 	GA();
-	GA(unsigned int populationSize, unsigned int genomeLength, Attribute* attrInstance, double acceptableError, unsigned int maxGenerations, unsigned int numCross, double mutationProb);
+	GA(unsigned int populationSize, unsigned int genomeLength, Attribute* attrInstance, double acceptableError, unsigned int maxGenerations, double elitePercentage, double newcomersPercentage, double mutationProb);
 
 	Generation createRandomGeneration();
 	Individual* findBest();
