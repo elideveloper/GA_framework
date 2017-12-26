@@ -6,4 +6,9 @@
 #define MIN(a,b) (((a)<(b))?(a):(b))
 
 
-//double boundBetween(min,max,val)
+inline double boundBetween(double min, double max, double val)
+{
+	if (val < min) return min;
+	if (val > max) return max;
+	return val;
+}

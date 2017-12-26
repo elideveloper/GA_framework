@@ -2,7 +2,7 @@
 
 #include <algorithm>
 #include <iostream>
-#include <unordered_map>
+//#include <unordered_map>
 
 double GA::sortAndGetMinError(Generation& generation)
 {
@@ -24,14 +24,13 @@ GA::GA() : populationSize(0), genomeLength(0), individualInstance(nullptr), acce
 {}
 
 GA::GA(unsigned int populationSize, unsigned int genomeLength, Attribute* attrInstance, double acceptableError, unsigned int maxGenerations, double elitePercentage, double newcomersPercentage, double mutationProb)
-	: populationSize(populationSize), genomeLength(genomeLength), acceptableError(acceptableError), maxGenerations(maxGenerations), mutationProb(mutationProb)
+	: populationSize(populationSize), genomeLength(genomeLength), acceptableError(acceptableError), maxGenerations(maxGenerations), mutationProb(boundBetween(0.0, 1.0, mutationProb))
 {
 	Genome genome; genome.reserve(genomeLength);
 	for (int i = 0; i < genomeLength; i++) genome.push_back(attrInstance->clone()->randomize());
 	this->individualInstance = new Individual(genome);
-	// use boundBetween()
-	this->numElite = populationSize * elitePercentage;
-	this->numNewcomers = populationSize * newcomersPercentage;
+	this->numElite = populationSize * boundBetween(0.0, 1.0, elitePercentage);
+	this->numNewcomers = populationSize * boundBetween(0.0, 1.0, newcomersPercentage);
 }
 
 Generation GA::createRandomGeneration()
@@ -46,17 +45,17 @@ Individual* GA::findBest()
 {
 	Generation gen = createRandomGeneration();
 	int j = 0;
+	unsigned int dadIndex, momIndex;
 	for (int i = 0; i < this->maxGenerations; i++) {
-		for (j = 1; j < MIN(this->populationSize - 1, this->numCross); j += 2) {
-			crossIndividuals(gen[j], gen[j + 1], this->mutationProb);
+		// вместо пула для скрещивания пока просто вся элита
+		for (j = this->numElite; j < this->populationSize - this->numNewcomers; j++) {
+			dadIndex = rand() % this->numElite;
+			momIndex = rand() % this->numElite;
+			gen[j]->turnToChildOf(gen[momIndex], gen[dadIndex], this->mutationProb);
 		}
-		for (j; j < this->populationSize; j++) {
-			gen[j]->randomize();
-		}
+		for (j; j < this->populationSize; j++) gen[j]->randomize();
 		if (this->sortAndGetMinError(gen) <= this->acceptableError) break;
 	}
-	for (int i = 1; i < this->populationSize; i++) {
-		delete gen[i];
-	}
+	for (int i = 1; i < this->populationSize; i++) delete gen[i];
 	return gen[0];
 }

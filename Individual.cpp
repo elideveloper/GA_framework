@@ -48,6 +48,19 @@ void Individual::mutate()
 	this->genome[rand() % this->genome.size()]->randomize();
 }
 
+void Individual::turnToChildOf(const Individual* mom, const Individual* dad, double mutationProb)
+{
+	if (mom->genome.size() > 1) {
+		int mid = (mom->genome.size() == 2) ? 1 : rand() % (mom->genome.size() - 1) + 1;
+		for (int i = 0; i < mom->genome.size(); i++) {
+			delete this->genome[i];
+			if (i < mid) this->genome[i] = mom->genome[i]->clone();
+			else this->genome[i] = dad->genome[i]->clone();
+		}
+	}
+	if (this->genome.size() > 0 && (rand() % (10000 + 1)) * 0.0001 <= mutationProb) this->mutate();
+}
+
 void crossIndividuals(Individual* mom, Individual* dad, double mutationProb)
 {
 	if (mom->genome.size() > 1) {

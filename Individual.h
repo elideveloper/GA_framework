@@ -29,7 +29,8 @@ public:
 	Individual* randomize();
 
 	static Individual* generateRandomOf(const Individual* ind);
-	void mutate();			// рандомизирует случайный параметр генома
+	void mutate();																// рандомизирует случайный параметр генома
+	void turnToChildOf(const Individual* mom, const Individual* dad, double mutationProb);
 
 	friend void crossIndividuals(Individual* mom, Individual* dad, double mutationProb);
 	friend double evaluateIndividual(const Individual* ind);
