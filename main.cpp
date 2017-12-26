@@ -8,10 +8,21 @@
 // сюда возможно какой то целевой параметр передавать а не зашивать внутри функции - подумать
 // простешая функция оценки индивида
 // чем меньше балл - тем лучше
-double evaluateIndividual(const Individual* ind) {
+
+//// for unordered genotype (sum areas of rectangles)
+//double fitnessFunction(const Individual* ind) {
+//	double sum = 0.0;
+//	for (Attribute* a : ind->genotype) {
+//		sum += static_cast<Rect*>(a)->getArea();
+//	}
+//	return fabs(10000.0 - sum);
+//}
+
+// for Ordered genotype (TSP)
+double fitnessFunction(const Individual* ind) {
 	double sum = 0.0;
-	for (Attribute* a : ind->genome) {
-		sum += static_cast<Rect*>(a)->getSquare();
+	for (Attribute* a : ind->genotype) {
+		sum += static_cast<Rect*>(a)->getArea();
 	}
 	return fabs(10000.0 - sum);
 }
@@ -27,10 +38,11 @@ double evaluateIndividual(const Individual* ind) {
 
 
 
-const unsigned POP_SIZE = 200;
-const unsigned GEN_LENGTH = 10;
-const unsigned NUM_GENERAIONS = 1000;
+const unsigned POP_SIZE = 100;
+//const unsigned GEN_LENGTH = 10;
+const unsigned NUM_GENERAIONS = 1;
 const double ELITE_PERC = 0.1;
+const double PARENTS_PERC = 0.5;
 const double NEWCOM_PERC = 0.3;
 const double MUT_PROB = 0.05;
 const double ACCEPTABLE_ERROR = 2.0;
@@ -38,9 +50,23 @@ const double ACCEPTABLE_ERROR = 2.0;
 int main() {
 	srand(time(0));
 
-	class GA ga(POP_SIZE, GEN_LENGTH, new Rect(), ACCEPTABLE_ERROR, NUM_GENERAIONS, ELITE_PERC, NEWCOM_PERC, MUT_PROB);
+	//GA ga(POP_SIZE, GEN_LENGTH, new Rect(), ACCEPTABLE_ERROR, NUM_GENERAIONS, ELITE_PERC, NEWCOM_PERC, MUT_PROB);
+
+	Genotype genotype;
+	genotype.push_back(new Rect(4, 1));
+	genotype.push_back(new Rect(4, 2));
+	genotype.push_back(new Rect(4, 3));
+	genotype.push_back(new Rect(4, 4));
+	genotype.push_back(new Rect(4, 5));
+	genotype.push_back(new Rect(4, 6));
+	genotype.push_back(new Rect(4, 7));
+	genotype.push_back(new Rect(4, 8));
+	genotype.push_back(new Rect(4, 9));
+	genotype.push_back(new Rect(4, 10));
+	GA ga(POP_SIZE, new Individual(genotype, true), ACCEPTABLE_ERROR, NUM_GENERAIONS, ELITE_PERC, PARENTS_PERC, NEWCOM_PERC, MUT_PROB);
+
 	Individual* bestInd = ga.findBest();
-	std::cout << "best: " << evaluateIndividual(bestInd) << std::endl;
+	std::cout << "best: " << fitnessFunction(bestInd) << std::endl;
 	bestInd->print();
 
 	system("pause");

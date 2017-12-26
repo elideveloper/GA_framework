@@ -11,10 +11,12 @@ class Individual {
 	// останется в классе наследующем Индивида определить функцию которая считывает набор данных в геном, и все содержащиеся данные должны быть унаследованы от Attribute 
 
 	// Порядок аттрибутов должен быть единственным, то есть под одним и тем же индексом должны быть параметры одного и того же типа
-	Genome genome;
+	bool hasOrderedGenotype;
+	Genotype genotype;
+	void getRecombinationOf(const Individual* mom, const Individual* dad, unsigned int point);
 public:
 	Individual();
-	Individual(const Genome& genome);
+	Individual(const Genotype& genotype, bool hasOrderedGenotype);
 	Individual(const Individual& ind);
 	Individual& operator=(const Individual& ind);
 	~Individual();
@@ -24,7 +26,9 @@ public:
 	// эти две функции могут не пригодится если Индивид не наследуется а используется как есть
 	// а по окончании эволюции, набор параметров берется прямо из генома
 	//virtual void initIndividual();		// инициализирует геном из наследующего класса
-	//virtual void setGenome();			// инициализирует поля наследующего класса значениями аттрибутов из генома
+	//virtual void setGenotype();			// инициализирует поля наследующего класса значениями аттрибутов из генома
+
+	unsigned int getGenotypeLength() const;
 
 	Individual* randomize();
 
@@ -33,7 +37,7 @@ public:
 	void turnToChildOf(const Individual* mom, const Individual* dad, double mutationProb);
 
 	//friend void crossIndividuals(Individual* mom, Individual* dad, double mutationProb);
-	friend double evaluateIndividual(const Individual* ind);
+	friend double fitnessFunction(const Individual* ind);
 };
 
 typedef double(*individEvaluator)(const Individual&);

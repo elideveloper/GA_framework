@@ -32,7 +32,7 @@ int Rect::getW() const
 	return this->w;
 }
 
-int Rect::getSquare() const
+int Rect::getArea() const
 {
 	return this->w * this->h;
 }
@@ -51,5 +51,5 @@ Attribute* Rect::clone()
 
 void Rect::print()
 {
-	std::cout << "h = " << this->h << "; w = " << this->w << "; S = " << this->getSquare() << std::endl;
+	std::cout << "h = " << this->h << "; w = " << this->w << "; S = " << this->getArea() << std::endl;
 }

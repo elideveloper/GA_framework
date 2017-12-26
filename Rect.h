@@ -15,7 +15,7 @@ public:
 	int getH() const;
 	int getW() const;
 
-	int getSquare() const;
+	int getArea() const;
 
 	virtual Attribute* randomize() override;
 	virtual Attribute* clone() override;

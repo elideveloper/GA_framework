@@ -13,4 +13,4 @@ public:
 
 void swapAttributes(Attribute* attr1, Attribute* attr2);
 
-typedef std::vector<Attribute*> Genome;
+typedef std::vector<Attribute*> Genotype;
