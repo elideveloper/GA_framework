@@ -25,18 +25,17 @@ double evaluateIndividual(const Individual* ind) {
 // возможно стоит сравнить это решение с вычитанием большого числа баллов в оценочной функции, чтобы только валидные проходили
 // но валидных нужное число может не набраться
 
-// подумать насчет скрещивания с лучшим геном и насчет скрещивания не только последовательно парном но и в других комбинациях
+
 
 const unsigned POP_SIZE = 200;
 const unsigned GEN_LENGTH = 10;
-const unsigned NUM_GENERAIONS = 10000;
+const unsigned NUM_GENERAIONS = 1000;
 const double ELITE_PERC = 0.1;
 const double NEWCOM_PERC = 0.3;
 const double MUT_PROB = 0.05;
 const double ACCEPTABLE_ERROR = 2.0;
 
 int main() {
-
 	srand(time(0));
 
 	class GA ga(POP_SIZE, GEN_LENGTH, new Rect(), ACCEPTABLE_ERROR, NUM_GENERAIONS, ELITE_PERC, NEWCOM_PERC, MUT_PROB);

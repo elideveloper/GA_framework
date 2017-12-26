@@ -24,13 +24,12 @@ GA::GA() : populationSize(0), genomeLength(0), individualInstance(nullptr), acce
 {}
 
 GA::GA(unsigned int populationSize, unsigned int genomeLength, Attribute* attrInstance, double acceptableError, unsigned int maxGenerations, double elitePercentage, double newcomersPercentage, double mutationProb)
-	: populationSize(populationSize), genomeLength(genomeLength), acceptableError(acceptableError), maxGenerations(maxGenerations), mutationProb(boundBetween(0.0, 1.0, mutationProb))
+	: populationSize(populationSize), genomeLength(genomeLength), acceptableError(acceptableError), maxGenerations(maxGenerations), 
+	numElite(populationSize * boundBetween(0.0, 1.0, elitePercentage)), numNewcomers(populationSize * boundBetween(0.0, 1.0, newcomersPercentage)), mutationProb(boundBetween(0.0, 1.0, mutationProb))
 {
 	Genome genome; genome.reserve(genomeLength);
 	for (int i = 0; i < genomeLength; i++) genome.push_back(attrInstance->clone()->randomize());
 	this->individualInstance = new Individual(genome);
-	this->numElite = populationSize * boundBetween(0.0, 1.0, elitePercentage);
-	this->numNewcomers = populationSize * boundBetween(0.0, 1.0, newcomersPercentage);
 }
 
 Generation GA::createRandomGeneration()
@@ -44,15 +43,10 @@ Generation GA::createRandomGeneration()
 Individual* GA::findBest()
 {
 	Generation gen = createRandomGeneration();
-	int j = 0;
-	unsigned int dadIndex, momIndex;
+	int j;
 	for (int i = 0; i < this->maxGenerations; i++) {
 		// вместо пула для скрещивания пока просто вся элита
-		for (j = this->numElite; j < this->populationSize - this->numNewcomers; j++) {
-			dadIndex = rand() % this->numElite;
-			momIndex = rand() % this->numElite;
-			gen[j]->turnToChildOf(gen[momIndex], gen[dadIndex], this->mutationProb);
-		}
+		for (j = this->numElite; j < this->populationSize - this->numNewcomers; j++) gen[j]->turnToChildOf(gen[rand() % this->numElite], gen[rand() % this->numElite], this->mutationProb);
 		for (j; j < this->populationSize; j++) gen[j]->randomize();
 		if (this->sortAndGetMinError(gen) <= this->acceptableError) break;
 	}
