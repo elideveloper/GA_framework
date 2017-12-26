@@ -1,6 +1,7 @@
 #include "Rect.h"
 
 #include <iostream>
+#include <string> 
 #include <random>
 
 Rect::Rect() : w(0), h(0)
@@ -47,6 +48,11 @@ Attribute* Rect::randomize()
 Attribute* Rect::clone()
 {
 	return new Rect(*this);
+}
+
+std::string Rect::getID()
+{
+	return std::to_string(this->h) + std::to_string(this->w) + std::to_string(this->getArea());
 }
 
 void Rect::print()

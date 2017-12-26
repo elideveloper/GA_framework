@@ -4,6 +4,7 @@
 #include <algorithm>    
 #include <set>
 #include <iterator>
+#include <unordered_map>
 
 void Individual::getRecombinationOf(const Individual * mom, const Individual * dad, unsigned int point)
 {
@@ -75,52 +76,29 @@ void Individual::turnToChildOf(const Individual* mom, const Individual* dad, dou
 {
 	if (mom->genotype.size() > 1) {
 		unsigned int point = (mom->genotype.size() == 2) ? 1 : rand() % (mom->genotype.size() - 1) + 1;
-		printf("point: %d\n", point);
 		if (this->hasOrderedGenotype) {
-			std::set<Attribute*> setMom, setDad, setIntersec, sMom, sDad;
+			std::set<std::string> setMom, setDad, setIntersec, sMom, sDad;
+			std::unordered_map<std::string, Attribute*> dadMap;
 			for (int i = 0; i < point; i++) {
-				setMom.insert(mom->genotype[i]);
-				setDad.insert(dad->genotype[i]);
+				setMom.insert(mom->genotype[i]->getID());
+				setDad.insert(dad->genotype[i]->getID());
+				dadMap[dad->genotype[i]->getID()] = dad->genotype[i];
 			}
 			getRecombinationOf(mom, dad, point);
-			std::set_intersection(setMom.begin(), setMom.end(), setDad.begin(), setDad.end(), std::inserter(setIntersec, setIntersec.end()));
-			// почему либо 0 пересечений либо пересекаются все
-
-			// потому что указатели всегда разные будут
-			// вынуждены хранить сами объекты и определить оператор сравненения
-			// иначе пересечение будет только в том случае если 
-			// один и тот же элемент будет в роли папы и мамы
-
-			printf("setIntersec.size(): %d\n", setIntersec.size());
+			std::set_intersection(setMom.begin(), setMom.end(), setDad.begin(), setDad.end(), std::inserter(setIntersec, setIntersec.begin()));
 			if (setIntersec.size() < point) {
-				std::set_difference(setMom.begin(), setMom.end(), setIntersec.begin(), setIntersec.end(), std::inserter(sMom, sMom.end()));
+				std::set_difference(setMom.begin(), setMom.end(), setIntersec.begin(), setIntersec.end(), std::inserter(sMom, sMom.begin()));
+				std::set_difference(setDad.begin(), setDad.end(), setIntersec.begin(), setIntersec.end(), std::inserter(sDad, sDad.begin()));
 				for (int i = point; i < this->genotype.size(); i++) {
-					if (sMom.erase(this->genotype[i]) > 0) {
+					if (sMom.erase(this->genotype[i]->getID()) > 0) {
 						delete this->genotype[i];
-						this->genotype[i] = (*sDad.begin())->clone();
+						this->genotype[i] = dadMap.find(*sDad.begin())->second->clone();
 						sDad.erase(sDad.begin());
 					}
 				}
-				//printf("Attributes after crossing over:\n");
-				//this->print();	// delete
 			}
 		}
 		else getRecombinationOf(mom, dad, point);
 	}
 	if (this->genotype.size() > 0 && (rand() % (10000 + 1)) * 0.0001 <= mutationProb) this->mutate();
 }
-
-//void crossIndividuals(Individual* mom, Individual* dad, double mutationProb)
-//{
-//	if (mom->genotype.size() > 1) {
-//		int point = (mom->genotype.size() == 2) ? 1 : rand() % (mom->genotype.size() - 1) + 1;
-//		for (int i = 0; i < mom->genotype.size(); i++) {
-//			if (i < point) swapAttributes(dad->genotype[i], mom->genotype[i]);
-//			else swapAttributes(mom->genotype[i], dad->genotype[i]);
-//		}
-//	}
-//	if (mom->genotype.size() > 0) {
-//		if ((rand() % (10000 + 1)) * 0.0001 <= mutationProb) mom->mutate();
-//		if ((rand() % (10000 + 1)) * 0.0001 <= mutationProb) dad->mutate();
-//	}
-//}

@@ -5,8 +5,9 @@
 struct Attribute {
 public:
 	virtual ~Attribute();
-	virtual Attribute* clone() = 0;
 	virtual Attribute* randomize() = 0;
+	virtual Attribute* clone() = 0;
+	virtual std::string getID() = 0;
 
 	virtual void print() = 0;
 };

@@ -19,6 +19,7 @@ public:
 
 	virtual Attribute* randomize() override;
 	virtual Attribute* clone() override;
+	virtual std::string getID() override;
 
 	virtual void print() override;
 };
