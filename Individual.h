@@ -13,6 +13,7 @@ public:
 	Individual& operator=(const Individual& ind);
 	~Individual();
 	unsigned int getGenotypeLength() const;
+	Genotype getGenotype() const;
 	Individual* randomize();
 	void mutate();																// рандомизирует случайный параметр генома
 	void turnToChildOf(const Individual* mom, const Individual* dad, double mutationProb);

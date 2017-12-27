@@ -49,6 +49,11 @@ unsigned int Individual::getGenotypeLength() const
 	return this->genotype.size();
 }
 
+Genotype Individual::getGenotype() const
+{
+	return this->genotype;
+}
+
 Individual* Individual::randomize()
 {
 	if (this->hasOrderedGenotype) std::random_shuffle(this->genotype.begin(), this->genotype.end());

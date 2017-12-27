@@ -29,7 +29,7 @@ GA::GA(unsigned int populationSize, unsigned int genotypeLength, Attribute* attr
 	numNewcomers(populationSize * boundBetween(0.0, 1.0, newcomersPercentage)), mutationProb(boundBetween(0.0, 1.0, mutationProb))
 {
 	Genotype genotype; genotype.reserve(genotypeLength);
-	for (int i = 0; i < genotypeLength; i++) genotype.push_back(attrInstance->clone()->randomize());
+	for (int i = 0; i < genotypeLength; i++) genotype.push_back(attrInstance->clone());
 	this->individualInstance = new Individual(genotype, false);
 }
 
