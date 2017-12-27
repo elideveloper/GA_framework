@@ -3,7 +3,6 @@
 #include <vector>
 
 struct Attribute {
-public:
 	virtual ~Attribute();
 	virtual Attribute* randomize() = 0;
 	virtual Attribute* clone() = 0;

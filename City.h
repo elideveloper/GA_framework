@@ -11,10 +11,8 @@ public:
 	City(const City& city);
 	City& operator=(const City& city);
 	~City();
-
 	int getX() const;
 	int getY() const;
-
 	double getDist(const City& city) const;
 
 	virtual Attribute* randomize() override;

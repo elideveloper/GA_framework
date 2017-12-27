@@ -44,11 +44,6 @@ Individual& Individual::operator=(const Individual& ind)
 	return *this;
 }
 
-void Individual::print()
-{
-	for (Attribute* a : this->genotype) a->print();
-}
-
 unsigned int Individual::getGenotypeLength() const
 {
 	return this->genotype.size();
@@ -59,11 +54,6 @@ Individual* Individual::randomize()
 	if (this->hasOrderedGenotype) std::random_shuffle(this->genotype.begin(), this->genotype.end());
 	else for (Attribute* a : this->genotype) a->randomize();
 	return this;
-}
-
-Individual* Individual::generateRandomOf(const Individual* ind)
-{
-	return (new Individual(*ind))->randomize();
 }
 
 void Individual::mutate()
@@ -101,4 +91,10 @@ void Individual::turnToChildOf(const Individual* mom, const Individual* dad, dou
 		else getRecombinationOf(mom, dad, point);
 	}
 	if (this->genotype.size() > 0 && (rand() % (10000 + 1)) * 0.0001 <= mutationProb) this->mutate();
+}
+
+
+void Individual::print()
+{
+	for (Attribute* a : this->genotype) a->print();
 }

@@ -39,10 +39,15 @@ GA::GA(unsigned int populationSize, Individual* individInstance, double acceptab
 	numNewcomers(populationSize * boundBetween(0.0, 1.0, newcomersPercentage)), mutationProb(boundBetween(0.0, 1.0, mutationProb))
 {}
 
+GA::~GA()
+{
+	delete this->individualInstance;
+}
+
 Generation GA::createRandomGeneration()
 {
 	Generation generation; generation.reserve(this->populationSize);
-	for (int j = 0; j < this->populationSize; j++) generation.push_back(Individual::generateRandomOf(this->individualInstance));
+	for (int j = 0; j < this->populationSize; j++) generation.push_back((new Individual(*this->individualInstance))->randomize());
 	this->sortAndGetMinError(generation);
 	return generation;
 }
